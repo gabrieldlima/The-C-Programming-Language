@@ -4,10 +4,10 @@
 |The allowable digits are 0 through 9, a through f, and A through F.           |
 */
 
+#include <stdio.h>
+
 #define YES 1
 #define NO 0
-
-#include <stdio.h>
 
 int htoi(char s[]);
 
