@@ -10,6 +10,7 @@
 #define BYTES 32
 
 void escape(char s[], char t[]);
+void unescape(char s[], char t[]);
 
 
 int main(void)
@@ -38,9 +39,11 @@ int main(void)
 
     // Program output
     escape(s_string, t_string);
+    printf("Original string: %s", t_string);
+    printf("Escaped string: %s\n", s_string);
 
-    printf("%s", t_string);
-    printf("%s\n", s_string);
+    unescape(s_string, t_string);
+    printf("Unescaped string: %s\n", s_string);
 
     return 0;
 }
@@ -50,7 +53,7 @@ void escape(char s[], char t[])
 {
     int i, j;
 
-    for (i = j = 0; t[i] != '\0'; i++)
+    for (i = j = 0; t[i] != '\0'; ++i)
     {
         switch (t[i])
         {
@@ -70,5 +73,38 @@ void escape(char s[], char t[])
         }
     }
 
+    s[j] = '\0';
+}
+
+
+void unescape(char s[], char t[])
+{
+    int i, j;
+
+    for (i = j = 0; t[i] != '\0'; ++i)
+    {
+        switch (t[i])
+        {
+            case '\\':                      // Backslash
+                switch (t[++i])
+                {
+                    case 'n':               // Real newline
+                        s[j++] = '\n';
+
+                    case 't':               // Real tab
+                        s[j++] = '\t';
+                  
+                    default:                // All others chars
+                        s[j++] = '\\';
+                        s[j++] = t[i];
+                        break;
+                }
+            break;
+
+            default:                        // Not a backslash
+                s[j++] = t[i];
+                break;
+        }
+    }
     s[j] = '\0';
 }
