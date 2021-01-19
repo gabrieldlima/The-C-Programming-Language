@@ -11,16 +11,19 @@
 
 #define BYTES 32
 
+int atoi(char sn[]);
+int strl(char string[]);
 void expand(char s1[], char s2[]);
-int atoi(int c);
 
 
+// Main function
 int main(void)
 {
     char string1[BYTES];
     char string2[BYTES];
-    char c;
+    int temp, n;
 
+    // Input
     printf("Shorthand notation to be expanded: (Example: a-z, 0-9, ...)\n>>> ");
     scanf("%s", string1);
 
@@ -29,40 +32,48 @@ int main(void)
     return 0;
 }
 
+
+// Expand string s1[] to s2[]
 void expand(char s1[], char s2[])
 {
-    int i;
-    int start = 0;
-    int end = 0;
+    int i = 0;
 
-    for (i = 0; !(isdigit(s1[i])); ++i);
+    for (i; !(isdigit(s1[i])) && !(isalpha(s1[i])); ++i);
 
-    start = atoi(s1[0]);
-    end = atoi(s1[2]);
+    
 
-    if (start < end)
-    {
-        while (start <= end)
-        {
-            printf("%d ", start++);
-        }
-    }
-    else if (start > end)
-    {
-        while (start >= end)
-        {
-            printf("%d ", start--);
-        }
-    }
-    putchar('\n');
+
+
+
 }
 
 
-int atoi(int c)
+// Convert string to integer
+int atoi(char sn[])
 {
-    int number = 0;
+    int number, size, c;
 
-    number = 10 * number + (c - '0');
+    number = 0;
+    size = strl(sn);
+
+    for (int i = 0; i < size && (c = sn[i]); ++i)
+    {
+        number = 10 * number + (c - '0');
+    }
     
     return number;
+}
+
+
+// Return the size of the string[]
+int strl(char string[])
+{
+    int i = 0;
+
+    while (string[i] != '\0')
+    {
+        ++i;
+    }
+
+    return i;
 }
