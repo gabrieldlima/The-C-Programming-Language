@@ -11,8 +11,6 @@
 
 #define BYTES 32
 
-int atoi(char sn[]);
-int strl(char string[]);
 void expand(char s1[], char s2[]);
 
 
@@ -37,43 +35,35 @@ int main(void)
 void expand(char s1[], char s2[])
 {
     int i = 0;
-
-    for (i; !(isdigit(s1[i])) && !(isalpha(s1[i])); ++i);
-
+    int j = 0;
+    int start = 0;
+    int end = 0;;
     
+    for (i; !(isdigit(s1[i])) && !(isalpha(s1[i])); ++i); 
 
-
-
-
-}
-
-
-// Convert string to integer
-int atoi(char sn[])
-{
-    int number, size, c;
-
-    number = 0;
-    size = strl(sn);
-
-    for (int i = 0; i < size && (c = sn[i]); ++i)
+    // Numeric notation expanded
+    if (isdigit(s1[i]))
     {
-        number = 10 * number + (c - '0');
+        start = 10 * start + (s1[i++] - '0');
+        
+        for (j = i; !(isdigit(s1[j])); ++j); 
+
+        end = 10 * end + (s1[j] - '0');
+
+        if (start < end)
+        {
+            for (int i = start; i <= end; ++i)
+            {
+                printf("%d ", i);
+            }   
+        }
+        else
+        {
+            for (int i = start; i >= end; --i)
+            {
+                printf("%d ", i);
+            }   
+        }
+        putchar('\n');
     }
-    
-    return number;
-}
-
-
-// Return the size of the string[]
-int strl(char string[])
-{
-    int i = 0;
-
-    while (string[i] != '\0')
-    {
-        ++i;
-    }
-
-    return i;
 }
