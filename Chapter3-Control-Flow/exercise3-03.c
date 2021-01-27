@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 #define BYTES 32
 
@@ -57,11 +58,15 @@ int main(void)
 // Expand string s1[] to s2[]
 void expand(char s1[], char s2[])
 {
-    int start = 0;
-    int end = 0;
+    int num_start = 0;
+    int num_end = 0;
+    int alpha_start = 0;
+    int alpha_end = 0;
+    
     int count = 0;
     int i = 0;
     
+    // Check if the string s1 is a valid input
     for (int i = 0; i < BYTES; ++i)
     {
         if (isdigit(s1[i]) || isalpha(s1[i]))
@@ -75,23 +80,52 @@ void expand(char s1[], char s2[])
         // Numeric notation block
         if (isdigit(s1[i]) && isdigit(s1[++i]))
         {
-            start = 10 * start + (s1[--i] - '0');
-            end = 10 * end + (s1[++i] - '0');
+            num_start = 10 * num_start + (s1[--i] - '0');
+            num_end = 10 * num_end + (s1[++i] - '0');
 
             i = 0;
-            if (start <= end)
+            if (num_start <= num_end)
             {
-                for (int j = start; j <= end; ++j)
+                for (int j = num_start; j <= num_end; ++j)
                 {
                     s2[i++] = j + '0';
                 }
             }
-            else if (start >= end)
+            else if (num_start >= num_end)
             {
-                for (int j = start; j >= end; --j)
+                for (int j = num_start; j >= num_end; --j)
                 {
                     s2[i++] = j + '0';
                 }
+            }
+        }
+
+        // Alphabetic notation block
+        if (isalpha(s1[i]) && isalpha(s1[++i]))
+        {
+            alpha_start = toupper(s1[--i]);
+            alpha_end = toupper(s1[++i]);
+
+            i = 0;
+            if (alpha_start <= alpha_end)
+            {
+                for (int j = alpha_start; j <= alpha_end; ++j)
+                {
+                    s2[i++] = j;
+                }
+
+                for (int k = i; k < BYTES; ++k)
+                    s2[k] = '\0';
+            }
+            else if (alpha_start >= alpha_end)
+            {
+                for (int j = alpha_start; j >= alpha_end; --j)
+                {
+                    s2[i++] = j;
+                }
+
+                for (int k = i; k < BYTES; ++k)
+                    s2[k] = '\0';
             }
         }
     }
