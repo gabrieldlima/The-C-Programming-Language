@@ -19,13 +19,36 @@ int main(void)
 {
     char string1[BYTES];
     char string2[BYTES];
-    int temp, n;
+    int c, i;
 
     // Input
     printf("Shorthand notation to be expanded: (Example: a-z, 0-9, ...)\n>>> ");
-    scanf("%s", string1);
+    i = 0;
+    while (i < BYTES && (c = getchar()) != EOF)
+    {        
+        if (isdigit(c) || isalpha(c))
+        {
+            string1[i++] = c;
+        }
+
+        if (c == '\n')
+        {
+            while (i < BYTES)
+            {
+                string1[i] = '\0';
+                i++;
+            }
+        }
+    }
 
     expand(string1, string2);
+
+    // Output
+    for (i = 0; string2[i] != '\0'; ++i)
+    {
+        printf("%c ", string2[i]);
+    }
+    putchar('\n');
 
     return 0;
 }
@@ -34,36 +57,42 @@ int main(void)
 // Expand string s1[] to s2[]
 void expand(char s1[], char s2[])
 {
-    int i = 0;
-    int j = 0;
     int start = 0;
-    int end = 0;;
+    int end = 0;
+    int count = 0;
+    int i = 0;
     
-    for (i; !(isdigit(s1[i])) && !(isalpha(s1[i])); ++i); 
-
-    // Numeric notation expanded
-    if (isdigit(s1[i]))
+    for (int i = 0; i < BYTES; ++i)
     {
-        start = 10 * start + (s1[i++] - '0');
-        
-        for (j = i; !(isdigit(s1[j])); ++j); 
-
-        end = 10 * end + (s1[j] - '0');
-
-        if (start < end)
+        if (isdigit(s1[i]) || isalpha(s1[i]))
         {
-            for (int i = start; i <= end; ++i)
-            {
-                printf("%d ", i);
-            }   
+            ++count;
         }
-        else
+    }
+
+    if (count >= 2)
+    {
+        // Numeric notation block
+        if (isdigit(s1[i]) && isdigit(s1[++i]))
         {
-            for (int i = start; i >= end; --i)
+            start = 10 * start + (s1[--i] - '0');
+            end = 10 * end + (s1[++i] - '0');
+
+            i = 0;
+            if (start <= end)
             {
-                printf("%d ", i);
-            }   
+                for (int j = start; j <= end; ++j)
+                {
+                    s2[i++] = j + '0';
+                }
+            }
+            else if (start >= end)
+            {
+                for (int j = start; j >= end; --j)
+                {
+                    s2[i++] = j + '0';
+                }
+            }
         }
-        putchar('\n');
     }
 }
